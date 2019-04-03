@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <script src="./api//dahui.js"></script>
+
+  <meta charset="utf-8">
+  <title>Posts &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendors/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="../assets/vendors/nprogress/nprogress.js"></script>
+</head>
+
+<body>
+  <script>NProgress.start()</script>
+
+  <div class="main">
+    <nav class="navbar">
+      <button class="btn btn-default navbar-btn fa fa-bars"></button>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
+        <li><a href="api/doLogout.php"><i class="fa fa-sign-out"></i>退出</a></li>
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="page-title">
+        <h1>所有文章</h1>
+        <a href="post-add.html" class="btn btn-primary btn-xs">写文章</a>
+      </div>
+      <!-- 有错误信息时展示 -->
+      <!-- <div class="alert alert-danger">
+        <strong>错误！</strong>发生XXX错误
+      </div> -->
+      <div class="page-action">
+        <!-- show when multiple checked -->
+        <a class="btn btn-danger btn-sm" href="javascript:duoHangDelete();" style="display: none">批量删除</a>
+        <form class="form-inline">
+          <select id="category" name="" class="form-control input-sm">
+            <option>所有分类</option>
+            <!-- <option value="">未分类</option> -->
+          </select>
+          <select id="status" name="" class="form-control input-sm">
+            <option>所有状态</option>
+            <option value="trashed">草稿</option>
+            <option value="published">已发布</option>
+          </select>
+          <button id="selShaiXuan" class="btn btn-default btn-sm">筛选</button>
+        </form>
+        <ul class="pagination pagination-sm pull-right">
+          <li><a href="#">上一页</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">下一页</a></li>
+        </ul>
+      </div>
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" width="40"><input type="checkbox"></th>
+            <th>标题</th>
+            <th>作者</th>
+            <th>分类</th>
+            <th class="text-center">发表时间</th>
+            <th class="text-center">状态</th>
+            <th class="text-center" width="100">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>随便一个名称</td>
+            <td>小小</td>
+            <td>潮科技</td>
+            <td class="text-center">2016/10/07</td>
+            <td class="text-center">已发布</td>
+            <td class="text-center">
+              <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>随便一个名称</td>
+            <td>小小</td>
+            <td>潮科技</td>
+            <td class="text-center">2016/10/07</td>
+            <td class="text-center">已发布</td>
+            <td class="text-center">
+              <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>随便一个名称</td>
+            <td>小小</td>
+            <td>潮科技</td>
+            <td class="text-center">2016/10/07</td>
+            <td class="text-center">已发布</td>
+            <td class="text-center">
+              <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="aside">
+    <div class="profile">
+      <img class="avatar" src="../uploads/avatar.jpg">
+      <h3 class="name">布头儿</h3>
+    </div>
+    <ul class="nav">
+      <li>
+        <a href="index.html"><i class="fa fa-dashboard"></i>仪表盘</a>
+      </li>
+      <li class="active">
+        <a href="#menu-posts" data-toggle="collapse">
+          <i class="fa fa-thumb-tack"></i>文章<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-posts" class="collapse in">
+          <li class="active"><a href="posts.html">所有文章</a></li>
+          <li><a href="post-add.html">写文章</a></li>
+          <li><a href="categories.html">分类目录</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="comments.html"><i class="fa fa-comments"></i>评论</a>
+      </li>
+      <li>
+        <a href="users.html"><i class="fa fa-users"></i>用户</a>
+      </li>
+      <li>
+        <a href="#menu-settings" class="collapsed" data-toggle="collapse">
+          <i class="fa fa-cogs"></i>设置<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-settings" class="collapse">
+          <li><a href="nav-menus.html">导航菜单</a></li>
+          <li><a href="slides.html">图片轮播</a></li>
+          <li><a href="settings.html">网站设置</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <script src="../assets/vendors/jquery/jquery.js"></script>
+  <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="../assets/vendors/twbs-pagination/jquery.twbsPagination.min.js"></script>
+
+
+  <script>NProgress.done()</script>
+</body>
+
+</html>
+<!-- //导入模板 -->
+<script src="./api//template-web.js"></script>
+<!-- 准备模板 -->
+<script type="text/html" id="tplTr">
+  {{ each list value}}
+  <tr>
+    <td class="text-center"><input type="checkbox" value='{{ value.id }}'></td>
+    <td>{{ value.title }}</td>
+    <td>{{ value.nickname }}</td>
+    <td>{{ value.name }}</td>
+    <td class="text-center">{{ value.created }}</td>
+    {{ if value.status == 'published'}}
+    <td class="text-center">已发布</td>
+    {{ else }}
+    <td class="text-center">草稿</td>
+    {{ /if }}
+    <td class="text-center">
+      <!-- <a href="post-edit.html?id={{ value.id }}" class="btn btn-default btn-xs">编辑</a> -->
+      <a href="javascript:getEdit({{ value.id }})" class="btn btn-default btn-xs">编辑</a> 
+      <a href="javascript:getDelete({{ value.id }});" class="btn btn-danger btn-xs">删除</a>
+
+    </td>
+  </tr>
+{{ /each }}
+</script>
+<script>
+  // 记录当前页
+  var psotsPage, totalPages;
+  //发请求生成数据
+  function load(page) {
+    //
+    $('tbody :checkbox').prop('checked', false);
+    //将当前页赋值给psotsPage;
+    psotsPage = page;
+    $.get({
+      url: 'api/getPosts.php',
+      data: {
+        pageIndex: page,
+        pageSize: 20,
+        category: $('#category').val(),
+        status: $('#status').val()
+      },
+      dataType: 'json',
+      success: function (obj) {
+        console.log(obj);
+        totalPages = obj.totalPages;
+        //调用模板
+        var html = template('tplTr', {
+          list: obj.data
+        })
+        $('tbody').html(html);
+
+        //销毁上一次的页码
+        $('.pagination').twbsPagination('destroy');
+        //生成页码
+        //1.获取ul
+        //2.调用twbsPagination方法
+        $('.pagination').twbsPagination({
+          totalPages: obj.totalPages,
+          visiblePages: 5,
+          startPage: page,
+          first: '首页',
+          prev: '上一页',
+          next: '下一页',
+          last: '尾页',
+          initiateStartPageClick: false,
+          onPageClick: function (enevt, page) {
+            load(page);
+          }
+        })
+      }
+    })
+  }
+  load(1);
+  //1.获取分类
+  $.get({
+    type: 'get',
+    url: 'api/getCategory.php',
+    dataType: 'json',
+    success: function (obj) {
+      for (var i = 0; i < obj.length; i++) {
+        $('<option>' + obj[i].name + '</option>').appendTo($('#category'));
+      }
+    }
+  })
+  //筛选
+  $('#selShaiXuan').on('click', function (e) {
+    //阻止默认行为
+    e.preventDefault();
+    //调用函数
+    load(1)
+  })
+
+  //全选  全不选
+  $('thead :checkbox').on('click', function () {
+    $('tbody :checkbox').prop('checked', $(this).prop('checked'))
+
+    if ($(this).prop('checked')) {
+      $('.page-action .btn-danger').fadeIn();
+    } else {
+      $('.page-action .btn-danger').fadeOut();
+    }
+  })
+  //反选  事件委托
+  $('tbody').on('click', ' :checkbox', function () {
+    $('thead :checkbox').prop('checked', $('tbody :checkbox').length == $('tbody :checked').length)
+
+    if ($('tbody :checked').length > 0) {
+      $('.page-action .btn-danger').fadeIn();
+    } else {
+      $('.page-action .btn-danger').fadeOut();
+    }
+  })
+  // 操作
+
+  //单行删除
+  function getDelete(ids) {
+    console.log(ids);
+    $.post({
+      url: 'api/getPostsDelete.php',
+      data: {
+        ids: ids
+      },
+      dataType: 'json',
+      success: function (obj) {
+        if (obj.msg == 'ok') {
+          //判断在最后一页操作删除
+          if ($('thead :checked').length > 0 && psotsPage == totalPages) {
+            load(psotsPage - 1)
+            //因为只有最后一页 才tbody :checkbox的长度才有可能为1
+          } else if ($('tbody :checkbox').length == 1) {
+            load(psotsPage - 1)
+          } else {
+            load(psotsPage)
+          }
+        } else {
+          alert('操作失败');
+        }
+      }
+    })
+  }
+
+  //多行删除
+  function duoHangDelete() {
+    //获取input选中的id
+    var arr = [];
+    for (var i = 0; i < $('tbody :checked').length; i++) {
+      arr[arr.length] = $('tbody :checked').eq(i).val()
+    }
+    var str = arr.join(',');
+    // console.log(str);
+    getDelete(str)
+  }
+
+  //点击编辑
+  function getEdit (id){
+    $.get({
+      url:'api/updatePost.php',
+      data:{
+          id:id
+      },
+      success:function(obj){
+        sessionStorage.setItem('xinXi',obj);
+        location = 'post-edit.html';
+      }
+    })
+  }
+</script>

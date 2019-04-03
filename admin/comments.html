@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <script src="./api//dahui.js"></script>
+
+  <meta charset="utf-8">
+  <title>Comments &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendors/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="../assets/vendors/nprogress/nprogress.js"></script>
+  <style>
+    th,td {
+      max-width: 420px;
+    }
+  </style>
+</head>
+
+<body>
+  <script>NProgress.start()</script>
+
+  <div class="main">
+    <nav class="navbar">
+      <button class="btn btn-default navbar-btn fa fa-bars"></button>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
+        <li><a href="api/doLogout.php"><i class="fa fa-sign-out"></i>退出</a></li>
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="page-title">
+        <h1>所有评论</h1>
+      </div>
+      <!-- 有错误信息时展示 -->
+      <!-- <div class="alert alert-danger">
+        <strong>错误！</strong>发生XXX错误
+      </div> -->
+      <div class="page-action">
+        <!-- show when multiple checked -->
+        <div class="btn-batch" style="display: none">
+          <button class="btn btn-info btn-sm" piLiang="approved">批量批准</button>
+          <button class="btn btn-warning btn-sm" piLiang="rejected">批量拒绝</button>
+          <button class="btn btn-danger btn-sm" piLiang="trashed">批量删除</button>
+        </div>
+        <ul class="pagination pagination-sm pull-right">
+          <!-- <li><a href="#">上一页</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">下一页</a></li> -->
+        </ul>
+      </div>
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" width="40"><input type="checkbox"></th>
+            <th>作者</th>
+            <th>评论</th>
+            <th>评论在</th>
+            <th>提交于</th>
+            <th>状态</th>
+            <th class="text-center" width="100">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr class="danger">
+            <td class="text-center"><input type="checkbox"></td>
+            <td>大大</td>
+            <td>楼主好人，顶一个</td>
+            <td>《Hello world》</td>
+            <td>2016/10/07</td>
+            <td>未批准</td>
+            <td class="text-center">
+              <a href="post-add.html" class="btn btn-info btn-xs">批准</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>大大</td>
+            <td>楼主好人，顶一个</td>
+            <td>《Hello world》</td>
+            <td>2016/10/07</td>
+            <td>已批准</td>
+            <td class="text-center">
+              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr> -->
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="aside">
+    <div class="profile">
+      <img class="avatar" src="../uploads/avatar.jpg">
+      <h3 class="name">布头儿</h3>
+    </div>
+    <ul class="nav">
+      <li>
+        <a href="index.html"><i class="fa fa-dashboard"></i>仪表盘</a>
+      </li>
+      <li>
+        <a href="#menu-posts" class="collapsed" data-toggle="collapse">
+          <i class="fa fa-thumb-tack"></i>文章<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-posts" class="collapse">
+          <li><a href="posts.html">所有文章</a></li>
+          <li><a href="post-add.html">写文章</a></li>
+          <li><a href="categories.html">分类目录</a></li>
+        </ul>
+      </li>
+      <li class="active">
+        <a href="comments.html"><i class="fa fa-comments"></i>评论</a>
+      </li>
+      <li>
+        <a href="users.html"><i class="fa fa-users"></i>用户</a>
+      </li>
+      <li>
+        <a href="#menu-settings" class="collapsed" data-toggle="collapse">
+          <i class="fa fa-cogs"></i>设置<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-settings" class="collapse">
+          <li><a href="nav-menus.html">导航菜单</a></li>
+          <li><a href="slides.html">图片轮播</a></li>
+          <li><a href="settings.html">网站设置</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <script src="../assets/vendors/jquery/jquery.js"></script>
+  <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+
+
+  <script>NProgress.done()</script>
+</body>
+
+</html>
+<!-- 导入模板 -->
+<script src="./api/template-web.js"></script>
+<!-- 准备模板 -->
+<script type="text/html" id="tplTr">
+  {{ each list value }}
+    {{ if value.status == 'held'}}
+    <tr class="danger">
+    {{ else }}
+    <tr>
+    {{ /if }}
+        <td class="text-center"><input type="checkbox" value="{{value.id}}"></td>
+        <td>{{ value.author }}</td>
+        <td>{{ value.content }}</td>
+        <td>《{{ value.title }}》</td>
+        <td>{{ value.created }}</td>
+        {{ if value.status == 'approved'}}
+        <td>已批准</td>
+        {{ else if value.status == 'held'}}
+        <td>待审核</td>
+        {{ else }}
+        <td>已拒绝</td>
+        {{ /if }}
+        <td class="text-center">
+          {{ if value.status == 'approved'}}
+          <a href="javascript:getCaoZuo('rejected',{{ value.id }})" class="btn btn-warning btn-xs">拒绝</a>
+          {{ else if value.status == 'held'}}
+          <a href="javascript:getCaoZuo('approved',{{ value.id }})" class="btn btn-info btn-xs">批准</a>
+          {{ /if }}
+          <a href="javascript:getCaoZuo('trashed',{{ value.id }})" class="btn btn-danger btn-xs">删除</a>
+        </td>
+    </tr>
+  {{ /each }}
+</script>
+<script type="text/html" id="tplPage">
+
+
+  <li><a href="javascript:load({{ currentPage-1<1?totalPage:currentPage-1 }})">上一页</a></li>
+
+  <% for(var i = 1 ; i <= totalPage ; i++ ) {%>
+    {{ if i == currentPage}}
+      <li class="active">
+    {{ else }}
+      <li>
+    {{ /if }}
+        <a href="javascript:load({{ i }})">{{ i }}</a>
+      </li>
+  <% } %>
+
+  <li><a href="javascript:load({{ currentPage+1>totalPage? 1:currentPage+1 }})">下一页</a></li>
+
+</script>
+<script>
+  //声明全局变量;
+  var loadpage, totalPage;
+  //封装函数将 页码数当参数传入
+  function load(page) {
+    $('thead :checkbox').prop('checked',false);
+    //赋值当前页
+    loadpage = page;
+    // 评论内容
+    $.ajax({
+      type: 'get',
+      url: 'api/getComments.php',
+      data: {
+        pageIndex: page,
+        pageSize: 20
+      },
+      success: function (obj) {
+
+        totalPage = obj.totalPages;
+        var html = template('tplTr', {
+          list: obj.data
+        })
+        $('tbody').html(html)
+        if (page > obj.totalPages) {
+          page = obj.totalPages
+        }
+        var html1 = template('tplPage', {
+          totalPage: obj.totalPages,
+          currentPage: page
+        })
+        $('.pagination').html(html1)
+      },
+      dataType: 'json'
+    })
+  }
+  load(1)
+
+
+  //给thead 下的input:checkbox 添加点击事件
+  //全选  全不选
+  $('thead :checkbox').on('click', function () {
+    // $(this).prop('checked')
+    $('tbody :checkbox').prop('checked', $(this).prop('checked'));
+    if ($(this).prop('checked')) {
+      $('.btn-batch').fadeIn();
+    } else {
+      $('.btn-batch').fadeOut();
+    }
+  })
+  //反选
+  $('tbody').on('click', ':checkbox', function () {
+    //判断tbody被选中的个数  
+    //如果选中的个数等于选框总数 name thead选中 ;否则反之;
+    //  console.log($('tbody :checkbox').length);
+    //  console.log($('tbody :checked').length);
+    //  if($('tbody :checkbox').length==$('tbody :checked').length){
+    //     $('thead :checkbox').prop('checked',true);
+    //  }else{
+    //     $('thead :checkbox').prop('checked',false);
+    //  }
+    $('thead :checkbox').prop('checked', $('tbody :checkbox').length == $('tbody :checked').length);
+    if ($('tbody :checked').length) {
+      $('.btn-batch').fadeIn();
+    } else {
+      $('.btn-batch').fadeOut();
+    }
+
+  })
+  //点击操作按钮发送请求
+  function getCaoZuo(status, ids) {
+    $.ajax({
+      type: 'post',
+      url: 'api/editComments.php',
+      data: {
+        status: status,
+        ids: ids
+      },
+      success: function (obj) {
+        if (obj.msg == 'ok') {
+          // 单行操作 判断
+          // console.log($('thead :checked'));
+          // 如果 点的是删除 并且 是最后一页 并且 只剩一条数据 刷新到上一页
+          if (status == 'trashed' && loadpage == totalPage && $('tbody tr').length == 1) {
+            load(loadpage - 1)
+          } else if (status == 'trashed' && loadpage == totalPage && $('thead :checked').length>0) {
+            load(loadpage - 1)
+          } else {
+            load(loadpage)
+          };
+        } else {
+          alert('操作失败');
+        }
+      },
+      dataType: 'json',
+    })
+  }
+  $('.btn-batch button').on('click', function () {
+    // 操作的字段
+    var caozuo = $(this).attr('piLiang')
+    var arr = [];
+    //获取被选中的id
+    $("tbody :checked").each(function () {
+      var value = $(this).val(); //这里的value就是每一个input的value值~
+      arr[arr.length] = value;
+    });
+    //数组转字符串 join
+    var str = arr.join(',')
+    // console.log(str);
+    //查被选中id 的状态字段
+    zhuangTai(caozuo, str)
+    //操作的id
+  })
+  //获取被选中的状态函数
+  function zhuangTai(caozuo, ids) {
+    $.ajax({
+      type: 'post',
+      url: 'api/getCheckZiDuan.php',
+      data: {
+        ids: ids
+      },
+      success: function (obj) {
+        //声明一个对象
+        duixiang = {}
+        for (var i = 0; i < obj.length; i++) {
+          //将被选中的id作为键 status作为值存入对象中
+          duixiang[obj[i].id] = obj[i].status
+        }
+        /*有条件的操作  判断
+        1.点击批量批准 单体上得有批准按钮才可批准;
+        a.点击拒绝 状态转为 rejected
+        b.点击批准 状态转为 approved
+        c.点击删除 状态转为 trashed
+        2.点击批量拒绝 单体上得有拒绝按钮才可拒绝;
+        */
+        //1遍历对象
+        for (var key in duixiang) {
+          //1.1判断对象的值  如果=='held' 则有批准按钮
+          if (duixiang[key] == 'held') {
+            //1.2判断点击的是否是批准按钮 如果是则进入
+            if (caozuo == 'approved') {
+              getCaoZuo(caozuo, key)
+            }
+            //2.1判断对象的值  如果=='approved' 则有拒绝按钮
+          } else if (duixiang[key] == 'approved') {
+            //2.2判断点击的是否是拒绝按钮 如果是则进入
+            if (caozuo == 'rejected') {
+              getCaoZuo(caozuo, key)
+            }
+          }
+          //3.1判断对象的值  有删除按钮
+          //3.2判断点击的是否是删除按钮 如果是则进入
+          if (caozuo == 'trashed') {
+            getCaoZuo(caozuo, key)
+          }
+        }
+      },
+      dataType: 'json'
+    })
+  }
+</script>
+
+<!--  //数组转字符串 join
+    // var str = arr.join(',')
+    // 字符串转数组 
+    // var str = 'ab+c+de';
+    // var a = str.split('+'); // [ab, c, de]
+    // var b = str.split(''); //[a, b, +, c, +, d, e] -->
